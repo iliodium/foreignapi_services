@@ -1,0 +1,18 @@
+FROM python:3.12.1-alpine3.19
+
+WORKDIR /grpc_server
+
+COPY ./requirements/requirements_grpc.txt /grpc_server/requirements.txt
+
+RUN pip install --no-cache-dir --upgrade -r /grpc_server/requirements.txt
+RUN python3 -m pip install --upgrade setuptools
+
+COPY ./bookkeeping_service_grpc/main.py .
+COPY ./bookkeeping_service_grpc/config.py .
+COPY ./bookkeeping_service_grpc/structure.proto .
+
+RUN python3 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. structure.proto
+
+ENV PORT=80
+
+CMD ["python", "-u", "main.py"]

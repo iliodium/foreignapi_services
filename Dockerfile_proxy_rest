@@ -1,0 +1,13 @@
+FROM python:3.12.1-alpine3.19
+
+WORKDIR /rest_server
+
+COPY ./requirements/requirements_proxy_rest.txt /rest_server/requirements.txt
+
+RUN pip install --no-cache-dir --upgrade -r /rest_server/requirements.txt
+
+COPY ./proxy/main.py .
+
+ENV PORT=8080
+
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port $PORT"]

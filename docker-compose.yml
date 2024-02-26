@@ -1,0 +1,56 @@
+version: "3"
+
+services:
+  proxy_rest:
+    container_name: proxy_rest
+
+    image: proxy_rest:01
+    build:
+      context: .
+      dockerfile: Dockerfile_proxy_rest
+
+    networks:
+      - bookkeeping_rest_network
+      - bookkeeping_rest_internal_network
+
+    environment:
+      - PORT=${BOOKKEEPING_PROXY_REST_PORT}
+      - PORT_BOOKKEEPING_REST=${BOOKKEEPING_REST_PORT}
+
+  bookkeeping_rest:
+    image: bookkeeping_rest:01
+    build:
+      context: .
+      dockerfile: Dockerfile_rest
+    networks:
+      - bookkeeping_rest_internal_network
+    environment:
+      - PORT=${BOOKKEEPING_REST_PORT}
+
+  bookkeeping_grpc:
+    container_name: bookkeeping_grpc
+
+    image: bookkeeping_grpc:01
+    build:
+      context: .
+      dockerfile: Dockerfile_grpc
+    networks:
+      - bookkeeping_grpc_network
+
+    environment:
+      - PORT=${BOOKKEEPING_GRPC_PORT}
+
+networks:
+  bookkeeping_rest_network:
+    driver: bridge
+    internal: true
+    name: bookkeeping_rest_network
+
+  bookkeeping_rest_internal_network:
+    driver: bridge
+    internal: true
+
+  bookkeeping_grpc_network:
+    driver: bridge
+    internal: true
+    name: bookkeeping_grpc_network
