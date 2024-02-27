@@ -1,0 +1,11 @@
+FROM python:3.12.1-alpine3.19
+
+WORKDIR /consumer_1
+
+COPY ./requirements/requirements_rabbitmq.txt ./requirements.txt
+
+RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
+
+COPY /rabbitmq/consumer_1.py .
+
+CMD ["python", "consumer_1.py"]

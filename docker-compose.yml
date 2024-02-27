@@ -40,6 +40,50 @@ services:
     environment:
       - PORT=${BOOKKEEPING_GRPC_PORT}
 
+  rabbitmq_consumer_1:
+    container_name: rabbitmq_consumer_1
+    restart: always
+    image: rabbitmq_consumer_1:03
+    build:
+      context: .
+      dockerfile: Dockerfile_consumer_1
+
+    networks:
+      - rabbitmq_network
+
+  rabbitmq_consumer_1_d:
+    container_name: rabbitmq_consumer_1_d
+    restart: always
+    image: rabbitmq_consumer_1:03
+    build:
+      context: .
+      dockerfile: Dockerfile_consumer_1
+
+    networks:
+      - rabbitmq_network
+
+  rabbitmq_consumer_2:
+    container_name: rabbitmq_consumer_2
+    restart: always
+    image: rabbitmq_consumer_2:03
+    build:
+      context: .
+      dockerfile: Dockerfile_consumer_2
+
+    networks:
+      - rabbitmq_network
+
+  rabbitmq_consumer_2_d:
+    container_name: rabbitmq_consumer_2_d
+    restart: always
+    image: rabbitmq_consumer_2:03
+    build:
+      context: .
+      dockerfile: Dockerfile_consumer_2
+
+    networks:
+      - rabbitmq_network
+
 networks:
   bookkeeping_rest_network:
     driver: bridge
@@ -54,3 +98,6 @@ networks:
     driver: bridge
     internal: true
     name: bookkeeping_grpc_network
+
+  rabbitmq_network:
+    name: rabbitmq_network
